@@ -19,14 +19,15 @@ import HomeScreen from "./pages/HomeScreen";
 
 import DestinationDetail from "./pages/DestinationDetail";
 
+
 import AccountScreen from "./pages/AccountScreen";
-import BrowseScreen from "./pages/BrowseScreen";
+import InfoScreen from "./pages/InfoScreen";
+import LogScreen from "./pages/LogScreen";
+import Home1 from "./pages/Home";
 
 
-
-import Home from "./pages/Home";
-
-
+// push notification testing
+//import PushNotification from "react-native-push-notification";
 
 
 
@@ -64,6 +65,12 @@ const Auth = () => {
     </Stack.Navigator>
   );
 };
+
+
+
+
+
+
  
 /* Main Navigator */
 const App = () => {
@@ -105,81 +112,35 @@ const App = () => {
           }}
         />
         
+
+
+
+
         <Stack.Screen
           name="Home"
           component={Tabs}
-          options={{
-            title: null, //Set Header Title
-            headerStyle: {
-              backgroundColor: "#E58911", //Set Header color
-            },
-
-            
-            headerTintColor: "#fff", //Set Header text color
-            headerTitleStyle: {
-              fontWeight: "bold", //Set Header text style
-            },
-
-
-          }}
+          options={{headerShown: false}}
         />
-
-
-        <Stack.Screen
-          name="DestinationDetail"
-          component={DestinationDetail}
-          options={{ headerShown: false }}
-         />
-
-
 
 
         <Stack.Screen
           name="AccountScreen"
           component={AccountScreen}
-          options={{
-            title: null, //Set Header Title
-            headerStyle: {
-              backgroundColor: "#E58911", //Set Header color
-            },
-
-            
-            headerTintColor: "#fff", //Set Header text color
-            headerTitleStyle: {
-              fontWeight: "bold", //Set Header text style
-            },
-
-
-          }}
         />
-
 
         <Stack.Screen
-          name="BrowseScreen"
-          component={BrowseScreen}
-          options={{
-            title: null, //Set Header Title
-            headerStyle: {
-              backgroundColor: "#E58911", //Set Header color
-            },
+          name="InfoScreen"
+          component={InfoScreen}
+        />
 
-            
-            headerTintColor: "#fff", //Set Header text color
-            headerTitleStyle: {
-              fontWeight: "bold", //Set Header text style
-            },
-
-
-          }}
+        
+        <Stack.Screen
+          name="LogScreen"
+          component={LogScreen}
         />
 
 
 
-      
-
-
-
-        
 
 
 

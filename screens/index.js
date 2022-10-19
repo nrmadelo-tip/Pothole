@@ -1,11 +1,21 @@
 import HomeScreen from "../pages/HomeScreen";
 import Home from "../pages/Home";
+import Account from "../pages/AccountScreen"
+import Info from "../pages/InfoScreen";
+import Log from "../pages/LogScreen";
+
+
+
 import DestinationDetail from "../pages/DestinationDetail";
 
 export {
     HomeScreen,
     Home,
-    DestinationDetail
+    Account,
+    Log,
+    Info
+
+    
 };
 
 

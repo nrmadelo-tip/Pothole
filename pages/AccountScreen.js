@@ -84,16 +84,9 @@ const Account = ({ navigation }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-
-        
-
-
-
-
-
-
-
         >
+
+          
           <Text
             style={{
               fontSize: 20,

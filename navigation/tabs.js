@@ -6,14 +6,22 @@ import { Home } from "../screens";
 
 import { icons, COLORS } from "../constants";
 import Account from "../pages/AccountScreen";
-import Browse from "../pages/BrowseScreen";
+import Info from "../pages/InfoScreen";
+import Log from "../pages/LogScreen"
 
 const Tab = createBottomTabNavigator();
 
+const homeName = "Home";
+const logsName = "Log";
+const info1Name = "Info";
+const profileName = "Profile";
+
+
+
 const tabOptions = {
-    showLabel: false,
+    showLabel: true,
     style: {
-        height: 90,
+        height: 70,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -25,16 +33,15 @@ const tabOptions = {
         elevation: 21, 
     },
 };
-
+    
 const Tabs = () => {
 
     return (
         <Tab.Navigator
             tabBarOptions={tabOptions}
             screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused }) => {
+                tabBarIcon: ({ focused }) => {  
                     const tintColor = focused ? COLORS.primary : COLORS.gray;
-
                     switch (route.name) {
                         case "Home":
                             return (
@@ -43,21 +50,35 @@ const Tabs = () => {
                                     resizeMode="contain"
                                     style={{
                                         tintColor: tintColor,
-                                        width: 30,
-                                        height: 30
+                                        width: 25,
+                                        height: 25
                                     }}
                                 />
                             );
-                        case "Logs":
+
+                         case "Log":
                             return (
-                                <Image
-                                    
+                                 <Image   
                                     source={require("../Image/log_icon.png")}
                                     resizeMode="contain"
                                     style={{
                                         tintColor: tintColor,
                                         width: 30,
-                                        height: 30
+                                        height: 28
+                                    }}
+                                  />
+    
+                                );
+
+                        case "Info":
+                            return (
+                                <Image
+                                    source={require("../Image/Info.png")}
+                                    resizeMode="contain"
+                                    style={{
+                                        tintColor: tintColor,
+                                        width: 25,
+                                        height: 25
                                     }}
                                 />
 
@@ -69,8 +90,8 @@ const Tabs = () => {
                                     resizeMode="contain"
                                     style={{
                                         tintColor: tintColor,
-                                        width: 30,
-                                        height: 30
+                                        width: 25,
+                                        height: 25
                                     }}
                                 />
                             );
@@ -79,20 +100,22 @@ const Tabs = () => {
             })}
         >
             <Tab.Screen
-                name="Home"
+                name= {homeName}
                 component={Home}
             />
 
-
             <Tab.Screen
-                name="Logs"
-                component={Browse}
+                name= {logsName}
+                component={Log}
             />
 
-
+            <Tab.Screen
+                name={info1Name}
+                component={Info}
+            />
 
             <Tab.Screen
-                name="Profile"
+                name= {profileName}
                 component={Account}
             />
         </Tab.Navigator>

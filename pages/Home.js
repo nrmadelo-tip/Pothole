@@ -15,14 +15,43 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 
+import PushNotification from "react-native-push-notification";
+
+
+PushNotification.configure({
+
+  // (required) Called when a remote is received or opened, or local notification is opened
+  onNotification: function (notification) {
+    console.log("NOTIFICATION:", notification);
+
+    // process the notification
+
+    // (required) Called when a remote is received or opened, or local notification is opened
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+
+  requestPermissions: Platform.OS === 'ios'
+
+});
+
+sendNotification = () => {
+  //console.log('pressed first')
+  PushNotification.localNotification({
+    channelId: "your-channel-id",
+    title: "You have detect Pothole",
+    message: "Pothole Notification",
+
+
+  });
+
+}
+
+
 
 
 
 
 const Home = ({ navigation }) => {
-
-
-
 
   function rendersStartLearning(){
     return (
@@ -43,10 +72,15 @@ const Home = ({ navigation }) => {
   }
 
 
+  const handleNotification = () =>{
+
+  }
+
+
+
+
+
   // Render
-
-
-
   return (
 
     <SafeAreaView style={{ flex: 1 }}>
@@ -80,7 +114,7 @@ const Home = ({ navigation }) => {
         }}>
 
 
-    <TouchableOpacity
+        <TouchableOpacity
                     style={[styles.shadow, { marginTop: SIZES.padding * 2, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
                 >
                     <LinearGradient
@@ -89,11 +123,42 @@ const Home = ({ navigation }) => {
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                     >
-                        <Text style={{ color: COLORS.white, ...FONTS.h3 }}>CONNECT</Text>
+                        <Text style={{ color: COLORS.white, ...FONTS.h3 }}>Wenks</Text>
                     </LinearGradient>
-                </TouchableOpacity>
+        </TouchableOpacity>
 
-      </View>
+
+
+
+
+        <TouchableOpacity
+              style={[styles.shadow, { marginTop: SIZES.padding * 2, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
+              activeOpacity={0.5}
+              onPress={() => this.sendNotification ()}
+            >
+              <LinearGradient
+                        style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 15 }}
+                        colors={['#FE9001', '#010101']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                    >
+                      <Text style={{ color: COLORS.white, ...FONTS.h3 }}>testing</Text>
+
+                    </LinearGradient>
+        </TouchableOpacity>
+
+
+
+
+
+
+
+
+
+
+
+
+        </View>
 
     </View>
   </SafeAreaView>
@@ -108,7 +173,7 @@ buttonStyle: {
   backgroundColor: "#FE9001",
   borderWidth: 0,
   color: "#FFFFFF",
-  borderColor: "#7DE24E",
+  borderColor: "#7DE24E ",
   height: 40,
   alignItems: "center",
   borderRadius: 50,

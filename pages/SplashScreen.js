@@ -11,12 +11,17 @@ import {
 } from "react-native";
  
 import auth from "@react-native-firebase/auth";
+
+
+
  
 const SplashScreen = ({ navigation }) => {
   //State for ActivityIndicator animation
   const [animating, setAnimating] = useState(true);
  
   useEffect(() => {
+    createChannels();
+
     setTimeout(() => {
       setAnimating(false);
       // Check if currentUser is set or not
@@ -27,6 +32,9 @@ const SplashScreen = ({ navigation }) => {
       );
     }, 5000);
   }, []);
+
+
+
  
   return (
     <SafeAreaView

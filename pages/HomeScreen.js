@@ -17,10 +17,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import { images, COLORS, FONTS, SIZES } from '../constants';
 
 
-
-
 import auth from "@react-native-firebase/auth";
- 
+
+
+
+
+
 
 
 const HomeScreen = ({ navigation }) => {
@@ -50,9 +52,6 @@ const HomeScreen = ({ navigation }) => {
           />
         </View>
 
-        
-
-
       <View style={{ flex: 1, padding: 16 }}>
         <View
           style={{
@@ -61,30 +60,9 @@ const HomeScreen = ({ navigation }) => {
             justifyContent: "center",
           }}>
 
-
-
-
-
-
-
-
-
-
-
-
-
           <Text style={{ ...FONTS.h2 }}>EyePothole</Text>
           <Text style={{ color: COLORS.gray, marginTop: SIZES.padding, textAlign: 'center', ...FONTS.body3 }}>Easy Solution to Report Pothole for your conviencs trip , 
             transportation and travel.</Text>
-
-
-
-
-
-
-
-   
-
 
 
                 <TouchableOpacity
@@ -100,8 +78,6 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={{ color: COLORS.white, ...FONTS.h3 }}>START!</Text>
                     </LinearGradient>
                 </TouchableOpacity>
-
-
 
                 
         </View>
