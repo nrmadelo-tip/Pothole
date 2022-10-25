@@ -20,7 +20,6 @@ const SplashScreen = ({ navigation }) => {
   const [animating, setAnimating] = useState(true);
  
   useEffect(() => {
-    createChannels();
 
     setTimeout(() => {
       setAnimating(false);
