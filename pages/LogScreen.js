@@ -2,7 +2,6 @@ import { FlatList,Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Image } from 'react-native';
 
 
 /*
@@ -87,7 +86,7 @@ const Log = () => {
   );
 };
 
-export default LogScreen;
+export default Log;
 
 const styles = StyleSheet.create({
   container:{
