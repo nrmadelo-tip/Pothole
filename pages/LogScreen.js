@@ -1,4 +1,4 @@
-import { FlatList,Image, StyleSheet, Text, View, ScrollView } from 'react-native'
+import { FlatList,Image, StyleSheet, Text, View, ScrollView, TextInput, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -18,12 +18,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const Log = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  
+  const [text,onChangeText] = useState();
+  const [das,setDas] = useState()
+  const [yes,setYes] = useState(true)
+  function updateIP (text){
+    setDas(text)
+    console.log(das)
+  }
   const getPots = async() =>{
+    setDas(text)
     try{
-      const response = await fetch("http://192.168.22.4:9191/GetPotholes")
+      
+      const response = await fetch(`http://${das}:9191/GetPotholes`)
       const dat = await response.json();
       setData(dat);
+      setYes(false)
+      setYes(false)
     } catch(error){
       console.error(error);
     }finally {
@@ -35,14 +45,26 @@ const Log = () => {
 
   useEffect(()=>{
     getPots()
-  },[data])
+  },[data,das])
 
 
   
 
   return(
     <SafeAreaView style={styles.container}>
-      
+      { yes && <TextInput
+        style={{height: 40,backgroundColor: 'azure', fontSize: 20,margin:20}}  
+        onChangeText={onChangeText}
+        value={text}
+        editable = {yes}
+        />}
+        {yes && 
+        <Button
+          onPress={()=>updateIP(text)}
+          title="Update IP Address of RPI"
+          color="#841584"
+          
+        />}
       <View style={styles.headerBar}>
           <Text style={styles.txtBar}> Log Screen</Text>
       </View>
