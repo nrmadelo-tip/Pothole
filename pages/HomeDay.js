@@ -50,7 +50,7 @@ sendNotification = () => {
 
 
 
-const Home = ({ navigation }) => {
+const HomeDay = ({ navigation }) => {
 
   function rendersStartLearning(){
     return (
@@ -115,6 +115,8 @@ const Home = ({ navigation }) => {
 
         <TouchableOpacity
                     style={[styles.shadow, { marginTop: SIZES.padding * 2, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
+                    onPress={() => navigation.navigate("ConnectScreen")}
+
                 >
                     <LinearGradient
                         style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 15 }}
@@ -131,7 +133,7 @@ const Home = ({ navigation }) => {
 
 
         <TouchableOpacity
-              style={[styles.shadow, { marginTop: SIZES.padding * 2, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
+              style={[styles.shadow, { marginTop: 1, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
               activeOpacity={0.5}
               onPress={() => this.sendNotification ()}
             >
@@ -164,7 +166,7 @@ const Home = ({ navigation }) => {
 );
 };
 
-export default Home;
+export default HomeDay;
 
 const styles = StyleSheet.create({
 buttonStyle: {

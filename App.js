@@ -23,7 +23,8 @@ import DestinationDetail from "./pages/DestinationDetail";
 import AccountScreen from "./pages/AccountScreen";
 import InfoScreen from "./pages/InfoScreen";
 import LogScreen from "./pages/LogScreen";
-import Home1 from "./pages/Home";
+import HomeDay from "./pages/HomeDay";
+import ConnectScreen from "./pages/ConnectScreen";
 
 
 // push notification testing
@@ -111,15 +112,22 @@ const App = () => {
             },
           }}
         />
+
+
+        
+        <Stack.Screen
+          name="ConnectScreen"
+          component={ConnectScreen}
+        />
         
 
 
 
 
         <Stack.Screen
-          name="Home"
+          name="HomeDay"
           component={Tabs}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
 
 

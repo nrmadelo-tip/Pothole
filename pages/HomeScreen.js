@@ -45,14 +45,14 @@ const HomeScreen = ({ navigation }) => {
             source={require("../Image/wenk.png")}
             style={{
               width: "750%",
-              height: 250,
+              height: 350,
               resizeMode: "contain",
               margin: 5,
             }}
           />
         </View>
 
-      <View style={{ flex: 1, padding: 16 }}>
+      <View style={{ flex: 1, padding: 1 }}>
         <View
           style={{
             flex: 1,
@@ -60,14 +60,13 @@ const HomeScreen = ({ navigation }) => {
             justifyContent: "center",
           }}>
 
-          <Text style={{ ...FONTS.h2 }}>EyePothole</Text>
-          <Text style={{ color: COLORS.gray, marginTop: SIZES.padding, textAlign: 'center', ...FONTS.body3 }}>Easy Solution to Report Pothole for your conviencs trip , 
+          <Text style={{ color: COLORS.gray,  textAlign: 'center', ...FONTS.body3 }}>Easy Solution to Report Pothole for your conviencs trip , 
             transportation and travel.</Text>
 
 
                 <TouchableOpacity
                     style={[styles.shadow, { marginTop: SIZES.padding * 2, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
-                    onPress={() => navigation.navigate("Home")}
+                    onPress={() => navigation.navigate("HomeDay")}
                 >
                     <LinearGradient
                         style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 15 }}
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
   },
   buttonTextStyle: {
     color: "#FE9001",
-    paddingVertical: 10,
+    paddingVertical: 1,
     fontSize: 16,
   },
 });

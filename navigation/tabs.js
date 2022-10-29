@@ -38,7 +38,7 @@ const Tabs = () => {
 
     return (
         <Tab.Navigator
-            tabBarOptions={tabOptions}
+            screenOptions={tabOptions}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {  
                     const tintColor = focused ? COLORS.primary : COLORS.gray;
