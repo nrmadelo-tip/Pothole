@@ -129,7 +129,18 @@ def reactNativeArchitectures() {
     def value = project.getProperties().get("reactNativeArchitectures")
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
+def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
 
+allprojects {
+
+    repositories { /* ... */ }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'com.facebook.react:react-native:' + REACT_NATIVE_VERSION
+        }
+    }
+}
 android {
     ndkVersion rootProject.ext.ndkVersion
 

@@ -25,7 +25,7 @@ import InfoScreen from "./pages/InfoScreen";
 import LogScreen from "./pages/LogScreen";
 import HomeDay from "./pages/HomeDay";
 import ConnectScreen from "./pages/ConnectScreen";
-
+import { GlobalProvider } from "./datafolder/GlobalState";
 
 // push notification testing
 //import PushNotification from "react-native-push-notification";
@@ -76,6 +76,7 @@ const Auth = () => {
 /* Main Navigator */
 const App = () => {
   return (
+    <GlobalProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
         {/* SplashScreen which will come once for 2 Seconds */}
@@ -154,6 +155,7 @@ const App = () => {
 
       </Stack.Navigator>
     </NavigationContainer>
+    </GlobalProvider>
   );
 };
  

@@ -1,6 +1,7 @@
 import { FlatList,Image, StyleSheet, Text, View, ScrollView, TextInput, Button } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext,useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { GlobalContext } from '../datafolder/GlobalState';
 
 
 
@@ -19,8 +20,8 @@ const Log = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [text,onChangeText] = useState();
-  const [das,setDas] = useState()
-  const [yes,setYes] = useState(true)
+  const {das,setDas} = useContext(GlobalContext)
+  const {yes,setYes} = useContext(GlobalContext)
   function updateIP (text){
     setDas(text)
     console.log(das)
