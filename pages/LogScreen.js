@@ -1,4 +1,4 @@
-import { FlatList,Image, StyleSheet, Text, View, ScrollView, TextInput, Button,TouchableOpacity,RefreshControl } from 'react-native'
+import { FlatList,Image, StyleSheet, Text, View,Alert, Modal, Pressable , ScrollView, TextInput, Button,TouchableOpacity,RefreshControl } from 'react-native'
 import React, { useContext,useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
@@ -64,19 +64,67 @@ const Log = () => {
   const [text,onChangeText] = useState();
   const {das,setDas} = useContext(GlobalContext)
   const {yes,setYes} = useContext(GlobalContext)
-
+  const [modalVisible, setModalVisible] = useState(false);
   const [newDataCount,setnewDataCount] = useState(null)
   const [dataCount, setdataCount] = useState(null)
+  const [emaildata,setEmailData] = useState([]);
 
   function updateIP (text){
     setDas(text)
     console.log(das)
   }
+  function openEmail(text){
+    setModalVisible(true)
+    setEmailData(text)
+    if(emaildata == null){
+      setEmailData(text)
+    }
+  }
+  const sendEmail = () =>{
+    var params = {
+      service_id: 'service_wc1rum6',
+      template_id: 'template_0cg60t8',
+      user_id: 'zLZXpiUyLB2HXMtKw',
+      template_params: {
+          'from_name': 'User',
+          'IMAGE' : `IMAGEHERE`,
+          'LOCATION' : emaildata.location,
+          'LATTITUDE' : emaildata.latitude,
+          'LONGITUDE' : emaildata.longitude,
+          'DATETIME' : emaildata.dateTime
+      }
+  }
+    console.log("SEND EMAIL!!!")
+    let headers = {
+      'Content-type': 'application/json'
+  };
+
+  let options = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(params)
+  };
+
+  fetch('https://api.emailjs.com/api/v1.0/email/send', options)
+    .then((httpResponse) => {
+        if (httpResponse.ok) {
+            console.log('Your mail is sent!');
+        } else {
+            return httpResponse.text()
+              .then(text => Promise.reject(text));
+        }
+    })
+    .catch((error) => {
+        console.log('Oops... ' + error);
+    });
+  }
+  const getBase64StringFromDataURL = (dataURL) =>
+    dataURL.replace('data:', '').replace(/^.+,/, '');
   const getPots = async() =>{
     setDas(text)
     try{
       
-      const response = await fetch(`http://192.168.22.3:9191/GetPotholes`)
+      const response = await fetch(`http://${das}:9191/GetPotholes`)
       const dat = await response.json();
       setData(dat);
       setYes(false)
@@ -173,9 +221,10 @@ const Log = () => {
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                     >
-                        <Text style={{ color: COLORS.white, ...FONTS.h3 }}>Send Email</Text>
+                        <Text style={{ color: COLORS.white, ...FONTS.h3 }} onPress={() => openEmail(item)}>Send Email</Text>
                     </LinearGradient>
                   </TouchableOpacity>
+                          
                       </View>
 
                     </View> 
@@ -183,6 +232,38 @@ const Log = () => {
           </View>
           )}/>
           <View style={styles.headerBar}/>
+                        <View style={styles.centeredView}>
+                          <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                              Alert.alert("Modal has been closed.");
+                              setModalVisible(!modalVisible);
+                            }}
+                          >
+                            <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                <Text style={styles.txtName}>Location: {emaildata.location}</Text>
+                                <Text style={styles.txtName}>dateTime: {emaildata.dateTime}</Text>
+                                <Text style={styles.txtName}>Latitude: {emaildata.latitude}</Text>
+                                <Text style={styles.txtName}>Longtitude: {emaildata.longitude}</Text>
+                                <Pressable
+                                  style={[styles.button]}
+                                  onPress={() => sendEmail()}
+                                >
+                                  <Text style={styles.textStyle}>Send Email</Text>
+                                </Pressable>
+                                <Pressable
+                                  style={[styles.button, styles.buttonClose]}
+                                  onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                  <Text style={styles.textStyle}>Exit Modal</Text>
+                                </Pressable>
+                              </View>
+                            </View>
+                          </Modal>
+                        </View>
     </SafeAreaView>
   );
 };
@@ -190,7 +271,47 @@ const Log = () => {
 export default Log;
 
 const styles = StyleSheet.create({
-
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
 
 
   container:{
