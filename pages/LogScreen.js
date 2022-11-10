@@ -97,7 +97,7 @@ const Log = () => {
       headers: headers,
       body: JSON.stringify(params)
   };
-
+  deym = das
   fetch(`http://${deym}:9191/sendMailWithAttachment`, options)
     .then((httpResponse) => {
         if (httpResponse.ok) {
@@ -144,7 +144,6 @@ const Log = () => {
 
 
   useEffect(()=>{
-    deym = das
     getPots()
   },[data,das]) 
 
