@@ -18,6 +18,7 @@ const ConnectScreen = () => {
           const response = await fetch(`http://${das}:9191/GetPotholes`)
           setYes(false)
           setYes(false)
+          setDas(das)
         } catch(error){
           console.error(error);
         }finally {
@@ -46,8 +47,13 @@ const ConnectScreen = () => {
             color="#841584"
             
             />}
+
             <Text
-                style={{ fontSize: 26, fontWeight: 'bold', color: 'black' }}>Connect Screen</Text>
+                style={{ fontSize: 26, fontWeight: 'bold', color: 'black' }}>Connect Screen
+            </Text>
+
+
+            
         </View>
         
     );

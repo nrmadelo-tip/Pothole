@@ -15,35 +15,35 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 
-import PushNotification from "react-native-push-notification";
+// import PushNotification from "react-native-push-notification";
 
 
-PushNotification.configure({
+// PushNotification.configure({
 
-  // (required) Called when a remote is received or opened, or local notification is opened
-  onNotification: function (notification) {
-    console.log("NOTIFICATION:", notification);
+//   // (required) Called when a remote is received or opened, or local notification is opened
+//   onNotification: function (notification) {
+//     console.log("NOTIFICATION:", notification);
 
-    // process the notification
+//     // process the notification
 
-    // (required) Called when a remote is received or opened, or local notification is opened
-    notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },
+//     // (required) Called when a remote is received or opened, or local notification is opened
+//     notification.finish(PushNotificationIOS.FetchResult.NoData);
+//   },
 
-  requestPermissions: Platform.OS === 'ios'
+//   requestPermissions: Platform.OS === 'ios'
 
-});
+// });
 
-sendNotification = () => {
-  //console.log('pressed first')
-  PushNotification.localNotification({
-    channelId: "your-channel-id",
-    title: "You have detect Pothole",
-    message: "Pothole Notification",
+// sendNotification = () => {
+//   //console.log('pressed first')
+//   PushNotification.localNotification({
+//     channelId: "your-channel-id",
+//     title: "You have detect Pothole",
+//     message: "Pothole Notification",
 
 
-  });
-}
+//   });
+// }
 
 
 
@@ -129,24 +129,6 @@ const HomeDay = ({ navigation }) => {
         </TouchableOpacity>
 
 
-
-
-
-        <TouchableOpacity
-              style={[styles.shadow, { marginTop: 1, width: '70%', height: 50, alignItems: 'center', justifyContent: 'center' }]}
-              activeOpacity={0.5}
-              onPress={() => this.sendNotification ()}
-            >
-              <LinearGradient
-                        style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center', borderRadius: 15 }}
-                        colors={['#FE9001', '#010101']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                    >
-                      <Text style={{ color: COLORS.white, ...FONTS.h3 }}>testing</Text>
-
-                    </LinearGradient>
-        </TouchableOpacity>
 
 
 

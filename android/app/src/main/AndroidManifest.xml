@@ -13,7 +13,9 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true">
-      
+
+
+
 
 
       <activity
