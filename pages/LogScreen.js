@@ -68,7 +68,7 @@ const Log = () => {
   const [newDataCount,setnewDataCount] = useState(null)
   const [dataCount, setdataCount] = useState(null)
   const [emaildata,setEmailData] = useState([]);
-
+  let deym
   function updateIP (text){
     setDas(text)
     console.log(das)
@@ -98,7 +98,7 @@ const Log = () => {
       body: JSON.stringify(params)
   };
 
-  fetch(`http://${das}:9191/sendMailWithAttachment`, options)
+  fetch(`http://${deym}:9191/sendMailWithAttachment`, options)
     .then((httpResponse) => {
         if (httpResponse.ok) {
             console.log('Your mail is sent!');
@@ -144,6 +144,7 @@ const Log = () => {
 
 
   useEffect(()=>{
+    deym = das
     getPots()
   },[data,das]) 
 
