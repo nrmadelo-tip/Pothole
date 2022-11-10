@@ -82,18 +82,11 @@ const Log = () => {
   }
   const sendEmail = () =>{
     var params = {
-      service_id: 'service_wc1rum6',
-      template_id: 'template_0cg60t8',
-      user_id: 'zLZXpiUyLB2HXMtKw',
-      template_params: {
-          'from_name': 'User',
-          'IMAGE' : `IMAGEHERE`,
-          'LOCATION' : emaildata.location,
-          'LATTITUDE' : emaildata.latitude,
-          'LONGITUDE' : emaildata.longitude,
-          'DATETIME' : emaildata.dateTime
-      }
-  }
+      "recipient": "qjaguiyab@tip.edu.ph",
+      "msgBody":"",
+      "subject": "Pothole Here!",
+      "attachment":emaildata.imagePath
+    }
     console.log("SEND EMAIL!!!")
     let headers = {
       'Content-type': 'application/json'
@@ -105,7 +98,7 @@ const Log = () => {
       body: JSON.stringify(params)
   };
 
-  fetch('https://api.emailjs.com/api/v1.0/email/send', options)
+  fetch(`http://${das}:9191/sendMailWithAttachment`, options)
     .then((httpResponse) => {
         if (httpResponse.ok) {
             console.log('Your mail is sent!');
