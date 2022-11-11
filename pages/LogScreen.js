@@ -110,8 +110,7 @@ const Log = () => {
         console.log('Oops... ' + error);
     });
   }
-  const getBase64StringFromDataURL = (dataURL) =>
-    dataURL.replace('data:', '').replace(/^.+,/, '');
+
   const getPots = async() =>{
     try{
       deym = das
@@ -120,18 +119,7 @@ const Log = () => {
       setData(dat);
       setYes(false)
       setYes(false)
-      setnewDataCount(dat.length)
-      if (newDataCount>dataCount){
-        Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
-        console.log('W')
-
-        setdataCount(newDataCount)
-        setdataCount(newDataCount)  
-        
-      }
-      //console.log(data[data.length-1]["location"])
-      setdataCount(newDataCount)
-      //console.log(dataCount)
+      setnewDataCount(data.length)
     } catch(error){
       console.error(error);
     }finally {
@@ -142,11 +130,21 @@ const Log = () => {
 
 
   useEffect(()=>{
+
+    setLoading(true);
     if(das != null){
       deym = das
     }
     getPots()
     
+      if (newDataCount>dataCount){
+        
+        Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
+        console.log('W')
+        
+        console.log(newDataCount)
+        setdataCount(newDataCount)
+      }
   },[data,das]) 
 
 
@@ -182,7 +180,7 @@ const Log = () => {
                 keyExtractor={({id}, index) => id}
 
                 contentContainerStyle={{ paddingBottom: "20%",padding:20,paddingRight:50,paddingLeft:50}}
-
+                inverted={true}
                 refreshControl={
                   <RefreshControl 
                     refreshing={refreshing}
