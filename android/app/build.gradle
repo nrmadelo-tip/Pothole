@@ -129,6 +129,8 @@ def reactNativeArchitectures() {
     def value = project.getProperties().get("reactNativeArchitectures")
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
+
+
 def REACT_NATIVE_VERSION = new File(['node', '--print',"JSON.parse(require('fs').readFileSync(require.resolve('react-native/package.json'), 'utf-8')).version"].execute(null, rootDir).text.trim())
 
 allprojects {
@@ -141,6 +143,10 @@ allprojects {
         }
     }
 }
+
+
+
+
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -287,7 +293,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:0.68.2"  // From node_modules
+    implementation "com.facebook.react:react-native:+"  // From node_modules
 
 
 
