@@ -117,7 +117,7 @@ const Log = () => {
       deym = das
       const response = await fetch(`http://${deym}:9191/GetPotholes`)
       const dat = await response.json();
-      setData(dat);
+      setData(dat.reverse());
       setYes(false)
       setYes(false)
       setnewDataCount(data.length)
@@ -126,26 +126,45 @@ const Log = () => {
     }finally {
       setLoading(false);
     }
-      await sleep(1000);
   }
-
-
+  const getAct = async() =>{
+    try{
+      deym = das
+      const response = await fetch(`http://${deym}:9191/GetActive`)
+      const dat = await response.json();
+      setData(dat.reverse());
+      Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
+    } catch(error){
+      console.log("HE")
+    }finally{
+      setLoading(false);
+    }
+    
+  }
+  let counts=0
   useEffect(()=>{
-
-    setLoading(true);
     if(das != null){
       deym = das
     }
     getPots()
-      if (newDataCount>dataCount){
-        
-        Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
-        console.log('W')
-        
-        console.log(newDataCount)
-        setdataCount(newDataCount)
-      }
-  },[data,das]) 
+  },[das])
+  useEffect(()=>{
+    
+    
+    
+    
+    
+   setTimeout(() => {
+    // do something 1 sec after clicked has changed
+    setLoading(true);
+    getAct()
+    counts +=1
+    console.log(counts)
+    
+ }, 500);
+
+ 
+  },[isLoading]) 
 
 
   
@@ -178,15 +197,13 @@ const Log = () => {
                 // }}
                 data={data}
                 keyExtractor={({id}, index) => id}
-
                 contentContainerStyle={{ paddingBottom: "20%",padding:20,paddingRight:50,paddingLeft:50}}
-                inverted={true}
-                refreshControl={
-                  <RefreshControl 
-                    refreshing={refreshing}
-                    onRefresh={getPots}/>
-                  }
-
+                
+                // refreshControl={
+                //   <RefreshControl 
+                //     refreshing={refreshing}
+                //     onRefresh={getPots}/>
+                //   }
 
 
 
