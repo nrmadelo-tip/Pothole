@@ -80,7 +80,7 @@ const Log = () => {
       setEmailData(text)
     }
   }
-  const sendEmail = () =>{
+  const sendEmail = (x) =>{
     var params = {
       "recipient": "dpwhtesting@gmail.com",
       "msgBody": `There is confirm Pothole detected at ${emaildata.location} \n in Longtitude:   ${emaildata.longitude} Latitude ${emaildata.latitude} \n on Time: ${emaildata.dateTime} \n ` ,
@@ -97,7 +97,8 @@ const Log = () => {
       headers: headers,
       body: JSON.stringify(params)
   };
-  fetch(`http://${deym}:9191/sendMailWithAttachment`, options)
+  console.log(deym)
+  fetch(`http://${x}:9191/sendMailWithAttachment`, options)
     .then((httpResponse) => {
         if (httpResponse.ok) {
             console.log('Your mail is sent!');
@@ -136,7 +137,6 @@ const Log = () => {
       deym = das
     }
     getPots()
-    
       if (newDataCount>dataCount){
         
         Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
@@ -243,7 +243,7 @@ const Log = () => {
                                 <Text style={styles.txtName}>Longtitude: {emaildata.longitude}</Text>
                                 <Pressable
                                   style={[styles.button]}
-                                  onPress={() => sendEmail()}
+                                  onPress={() => sendEmail(das)}
                                 >
                                   <Text style={styles.textStyle}>Send Email</Text>
                                 </Pressable>
