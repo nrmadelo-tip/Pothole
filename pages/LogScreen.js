@@ -133,7 +133,7 @@ const Log = () => {
       const response = await fetch(`http://${deym}:9191/GetActive`)
       const dat = await response.json();
       setData(dat.reverse());
-      Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
+      Notification (data.reverse()[data.length-1]["location"],data[data.length-1]["dateTime"]);
     } catch(error){
       console.log("HE")
     }finally{
@@ -153,7 +153,7 @@ const Log = () => {
     
     
     
-    
+
    setTimeout(() => {
     // do something 1 sec after clicked has changed
     setLoading(true);
@@ -161,7 +161,7 @@ const Log = () => {
     counts +=1
     console.log(counts)
     
- }, 500);
+ }, 5000);
 
  
   },[isLoading]) 
