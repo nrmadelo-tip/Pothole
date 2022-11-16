@@ -2,25 +2,7 @@ import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-n
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../datafolder/GlobalState';
 import WebView from 'react-native-webview';
-import PushNotification from "react-native-push-notification";
 
-sendNotification = () => {
-  //console.log('pressed first')
-  PushNotification.localNotification({
-    title: "You have detect Pothole",
-    message: "Pothole Notification",
-  });
-}
-const Notification = (Location,dateTime) => {
-  PushNotification.localNotification({
-    // /* Android Only Properties /
-    channelId: "channel-id", // (required)
-    channelName: "My channel", // (required)
-
-    title: 'Pothole Detected', // (optional)
-    message: `Pothole Detected in ${Location} at ${dateTime}` ,  // (required)
-  });
-};
 
 const ConnectScreen = () => {
     function updateIP (text){
@@ -32,7 +14,6 @@ const ConnectScreen = () => {
       const [text,onChangeText] = useState()
       const [isLoading, setLoading] = useState(true);
       const [data, setData] = useState([]);
-      let counts=0
       const getPots = async() =>{
         setDas(text)
         try{
@@ -40,9 +21,6 @@ const ConnectScreen = () => {
           const response = await fetch(`http://${das}:9191/GetPotholes`)
           const dat = await response.json();
           setYes(false)
-          setYes(false)
-          setDas(das)
-          setData(dat.reverse());
         } catch(error){
           console.error(error);
         }finally {
@@ -50,38 +28,11 @@ const ConnectScreen = () => {
         }
       }
     
-      const getAct = async() =>{
-        try{
-          deym = das
-          const response = await fetch(`http://${das}:9191/GetActive`)
-          const dat = await response.json();
-          setData(dat);
-          Notification (data[data.length-1]["location"],data[data.length-1]["dateTime"]);
-          console.log("HEEEEEEEEEEE")
-        } catch(error){
-          console.log("HE")
-        }finally{
-          setLoading(false);
-        }
-        
-      }
     
       useEffect(()=>{
         getPots()
         console.log(yes)
       },[das])
-      useEffect(()=>{
-        setTimeout(() => {
-         // do something 1 sec after clicked has changed
-         setLoading(true);
-         getAct()
-         counts +=1
-         console.log(counts)
-         
-      }, 5000);
-     
-      
-       },[isLoading]) 
      
     return(
         <View style={{ flex: 1,  justifyContent: 'center' }}>
@@ -106,14 +57,10 @@ const ConnectScreen = () => {
             {!yes && 
             <SafeAreaView style={{ flex: 1 }}>
             <WebView 
-              source={{ uri: `${das}:5000/` }} 
+              source={{ uri: `${text}:5000/` }} 
             />
-            <View>
-              
-            </View>
           </SafeAreaView>}
-            
-
+          
             
         </View>
         
