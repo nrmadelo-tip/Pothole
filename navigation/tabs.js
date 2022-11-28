@@ -7,7 +7,8 @@ import { Home } from "../screens";
 import { icons, COLORS } from "../constants";
 import Account from "../pages/AccountScreen";
 import Info from "../pages/InfoScreen";
-import Log from "../pages/LogScreen"
+import Log from "../pages/LogScreen";
+import Map from "../pages/MapScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,7 +16,7 @@ const homeName = "Home";
 const logsName = "Log";
 const info1Name = "Info";
 const profileName = "Profile";
-
+const mapName = "Map";
 
 
 const tabOptions = {
@@ -83,6 +84,27 @@ const Tabs = () => {
                                 />
 
                             );
+
+                    
+                        case "Map":
+                            return (
+                                <Image
+                                     source={require("../Image/Compass.png")}
+                                     resizeMode="contain"
+                                       style={{
+                                           tintColor: tintColor,
+                                        width: 25,
+                                        height: 25
+                                     }}
+                                 />
+    
+                           );
+
+
+
+
+
+
                         case "Profile":
                             return (
                                 <Image
@@ -109,15 +131,28 @@ const Tabs = () => {
                 component={Log}
             />
 
+
+            <Tab.Screen
+                name={mapName}
+                component={Map}
+            />
+
+    
             <Tab.Screen
                 name={info1Name}
                 component={Info}
             />
 
+
+
             <Tab.Screen
                 name= {profileName}
                 component={Account}
             />
+
+
+
+
         </Tab.Navigator>
     );
 };

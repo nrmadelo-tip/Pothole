@@ -25,6 +25,9 @@ import InfoScreen from "./pages/InfoScreen";
 import LogScreen from "./pages/LogScreen";
 import HomeDay from "./pages/HomeDay";
 import ConnectScreen from "./pages/ConnectScreen";
+import MapScreen from "./pages/MapScreen";
+
+
 import { GlobalProvider } from "./datafolder/GlobalState";
 
 // push notification testing
@@ -146,6 +149,11 @@ const App = () => {
         <Stack.Screen
           name="LogScreen"
           component={LogScreen}
+        />
+
+        <Stack.Screen
+          name="MapScreen"
+          component={MapScreen}
         />
 
 
