@@ -5,6 +5,7 @@ import WebView from 'react-native-webview';
 
 
 const ConnectScreen = () => {
+  let deym
     function updateIP (text){
         setDas(text)
         console.log(das)
@@ -15,10 +16,9 @@ const ConnectScreen = () => {
       const [isLoading, setLoading] = useState(true);
       const [data, setData] = useState([]);
       const getPots = async() =>{
-        setDas(text)
         try{
-          
-          const response = await fetch(`http://${das}:9191/GetPotholes`)
+          deym = das
+          const response = await fetch(`http://${deym}:9191/GetPotholes`)
           const dat = await response.json();
           setYes(false)
         } catch(error){
@@ -57,7 +57,7 @@ const ConnectScreen = () => {
             {!yes && 
             <SafeAreaView style={{ flex: 1 }}>
             <WebView 
-              source={{ uri: `${text}:5000/` }} 
+              source={{ uri: `${das}:5000/` }} 
             />
           </SafeAreaView>}
           

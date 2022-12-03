@@ -4,8 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 import LinearGradient from 'react-native-linear-gradient';
 import { GlobalContext } from '../datafolder/GlobalState';
-
-
+import Lottie from 'lottie-react-native';
 
 import PushNotification from "react-native-push-notification";
 
@@ -58,7 +57,7 @@ const Notification = (Location,dateTime) => {
 
 
 const Log = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [text,onChangeText] = useState();
@@ -66,8 +65,9 @@ const Log = () => {
   const {yes,setYes} = useContext(GlobalContext)
   const [modalVisible, setModalVisible] = useState(false);
   const [newDataCount,setnewDataCount] = useState(null)
-  const [dataCount, setdataCount] = useState(null)
+  const [emailsuccess,setEmailSuccess] = useState(false);
   const [emaildata,setEmailData] = useState([]);
+  const [visible, setVisible] = useState(false);
   let deym
   function updateIP (text){
     setDas(text)
@@ -98,16 +98,40 @@ const Log = () => {
       body: JSON.stringify(params)
   };
   console.log(deym)
+  setModalVisible(!modalVisible)
+  setVisible(true)
   fetch(`http://${x}:9191/sendMailWithAttachment`, options)
     .then((httpResponse) => {
         if (httpResponse.ok) {
-            console.log('Your mail is sent!');
+            setVisible(false)
+            setEmailSuccess(true)
+            console.log('Your mail is sent!');            
         } else {
+            setVisible(false)
             return httpResponse.text()
               .then(text => Promise.reject(text));
         }
     })
     .catch((error) => {
+      setVisible(false)
+      Alert.alert(
+        "Error Send Email",
+        "Your Email has not been sent",
+        [
+          {
+            text: "Ok",
+            onPress: ()=> console.log("cancel is pressed"),
+            style: "cancel",
+          },
+        ],
+        {
+          cancelable: true,
+          onDismiss: ()=>
+          Alert.alert(
+            "This alert was dismissed by tapping outside of the alert dialog."
+          ),
+        }
+      )
         console.log('Oops... ' + error);
     });
   }
@@ -115,14 +139,30 @@ const Log = () => {
   const getPots = async() =>{
     try{
       deym = das
-      const response = await fetch(`http://${deym}:9191/GetPotholes`)
+      const response = await fetch(`http://${deym}:9191/GetPotholes2`)
       const dat = await response.json();
+      console.log(dat)
       setData(dat.reverse());
       setYes(false)
       setYes(false)
       setnewDataCount(data.length)
+      setRefreshing(true)
+    } catch(error){
+      console.log("NO VALUE",error)
+    }finally {
+      setLoading(false);
+    }
+  }
+  const update_2 = async() =>{
+    try{
+      deym = das
+      const response = await fetch(`http://${deym}:9191/GetPotholes`)
+      const dat = await response.json();
+      setData(prevArray =>[...prevArray,dat])
+      console.log("ERRORUPDATE2")
     } catch(error){
       console.error(error);
+      console.log("ERRORUPDATE3")
     }finally {
       setLoading(false);
     }
@@ -132,16 +172,16 @@ const Log = () => {
       deym = das
       const response = await fetch(`http://${deym}:9191/GetActive`)
       const dat = await response.json();
-      setData(dat.reverse());
+      setData(oldData=>[...oldData,dat])
       Notification (data.reverse()[data.length-1]["location"],data[data.length-1]["dateTime"]);
     } catch(error){
       console.log("HE")
+      update_2()
     }finally{
       setLoading(false);
     }
     
   }
-  let counts=0
   useEffect(()=>{
     if(das != null){
       deym = das
@@ -149,22 +189,14 @@ const Log = () => {
     getPots()
   },[das])
   useEffect(()=>{
-    
-    
-    
-    
-
-   setTimeout(() => {
-    // do something 1 sec after clicked has changed
-    setLoading(true);
-    getAct()
-    counts +=1
-    console.log(counts)
-    
- }, 5000);
-
- 
-  },[isLoading]) 
+    if(refreshing == true){
+      const interval = setInterval(()=>{
+        // getAct()
+        console.log("TryHere")
+      },6000)
+      return () => clearInterval(interval)
+    }
+  },[refreshing]) 
 
 
   
@@ -241,10 +273,55 @@ const Log = () => {
                 
           </View>
           )}/>
+          {/* <AnimatedLoader
+            visible = {visible}
+            overlayColor = "rgba(255,255,255,0.75)"
+            animationStyle={styles.lottie}
+            speed={1}>
+            <Text>Sending Email~~</Text>
+          </AnimatedLoader> */}
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={visible}
+              onRequestClose={()=>{
+                setVisible(!visible)
+              }}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.emailS}>
+                    {visible && <Lottie source={require('../assets/animated_json/email-sent.json')} autoPlay loop />}
+                  </View>
+                </View>
+              </Modal>
+          </View>
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={emailsuccess}
+              onRequestClose={()=>{
+                setVisible(!visible)
+              }}
+              >
+                <View style={styles.centeredView}>
+                  <View>
+                  <Pressable
+                      style={[styles.emailS, styles.emailS]}
+                      onPress={() => setEmailSuccess(!emailsuccess)}
+                      >
+                    <Lottie source={require('../assets/animated_json/email-success.json')}autoPlay loop={false}/>
+                    
+                      </Pressable>
+                  </View>
+                </View>
+              </Modal>
+          </View>
+          
           <View style={styles.headerBar}/>
                         <View style={styles.centeredView}>
                           <Modal
-                            animationType="slide"
                             transparent={true}
                             visible={modalVisible}
                             onRequestClose={() => {
@@ -286,6 +363,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22
+  },
+  emailS: {
+    margin: 0,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 100,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
   modalView: {
     margin: 20,

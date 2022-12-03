@@ -273,7 +273,6 @@ android {
 
 dependencies {
     // Import the Firebase BoM
-    
     implementation platform("com.google.firebase:firebase-bom:30.4.1")
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
@@ -281,6 +280,10 @@ dependencies {
     implementation project(':react-native-push-notification')
 
 
+    // TRY IMPLEMENTATION CRASH ON REST CALL
+    api(platform("com.squareup.okhttp3:okhttp-bom:4.7.2"))
+    api("com.squareup.okhttp3:okhttp")
+    api("com.squareup.okhttp3:logging-interceptor")
 
 
 
