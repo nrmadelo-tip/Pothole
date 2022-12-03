@@ -192,6 +192,7 @@ const Log = () => {
     if(refreshing == true){
       const interval = setInterval(()=>{
         // getAct()
+        getPots()
         console.log("TryHere")
       },6000)
       return () => clearInterval(interval)

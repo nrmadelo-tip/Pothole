@@ -280,11 +280,6 @@ dependencies {
     implementation project(':react-native-push-notification')
 
 
-    // TRY IMPLEMENTATION CRASH ON REST CALL
-    api(platform("com.squareup.okhttp3:okhttp-bom:4.7.2"))
-    api("com.squareup.okhttp3:okhttp")
-    api("com.squareup.okhttp3:logging-interceptor")
-
 
 
 

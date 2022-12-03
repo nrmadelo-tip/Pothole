@@ -18,7 +18,7 @@ const ConnectScreen = () => {
       const getPots = async() =>{
         try{
           deym = das
-          const response = await fetch(`http://${deym}:9191/GetPotholes`)
+          const response = await fetch(`http://${deym}:9191/GetPotholes2`)
           const dat = await response.json();
           setYes(false)
         } catch(error){
