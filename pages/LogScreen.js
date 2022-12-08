@@ -142,7 +142,7 @@ const Log = () => {
       const response = await fetch(`http://${deym}:9191/GetPotholes2`)
       const dat = await response.json();
       console.log(dat)
-      setData(dat.reverse());
+      setData(dat);
       setYes(false)
       setYes(false)
       setnewDataCount(data.length)
