@@ -2,8 +2,24 @@ import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-n
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../datafolder/GlobalState';
 import WebView from 'react-native-webview';
+import PushNotification from "react-native-push-notification";
+sendNotification = () => {
+  //console.log('pressed first')
+  PushNotification.localNotification({
+    title: "You have detect Pothole",
+    message: "Pothole Notification",
+  });
+}
+const Notification = (Location,dateTime) => {
+  PushNotification.localNotification({
+    // /* Android Only Properties /
+    channelId: "channel-id", // (required)
+    channelName: "My channel", // (required)
 
-
+    title: 'Pothole Detected', // (optional)
+    message: `Pothole Detected in ${Location} at ${dateTime}` ,  // (required)
+  });
+};
 const ConnectScreen = () => {
   let deym
     function updateIP (text){
@@ -58,6 +74,9 @@ const ConnectScreen = () => {
             <SafeAreaView style={{ flex: 1 }}>
             <WebView 
               source={{ uri: `${das}:5000/` }} 
+            />
+            <WebView 
+              source={{ uri:'https://9gag.com/' }} 
             />
           </SafeAreaView>}
           

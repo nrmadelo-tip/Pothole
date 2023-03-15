@@ -139,7 +139,7 @@ const Log = () => {
   const getPots = async() =>{
     try{
       deym = das
-      const response = await fetch(`http://${deym}:9191/GetPotholes2`)
+      const response = await fetch(`http://${deym}:9191/GetPotholes`)
       const dat = await response.json();
       console.log(dat)
       setData(dat);
@@ -166,21 +166,6 @@ const Log = () => {
     }finally {
       setLoading(false);
     }
-  }
-  const getAct = async() =>{
-    try{
-      deym = das
-      const response = await fetch(`http://${deym}:9191/GetActive`)
-      const dat = await response.json();
-      setData(oldData=>[...oldData,dat])
-      Notification (data.reverse()[data.length-1]["location"],data[data.length-1]["dateTime"]);
-    } catch(error){
-      console.log("HE")
-      update_2()
-    }finally{
-      setLoading(false);
-    }
-    
   }
   useEffect(()=>{
     if(das != null){
@@ -246,7 +231,8 @@ const Log = () => {
           <View>
                     <View style={styles.itemList}>
                       <Image 
-                      source={{uri: `data:image/png;base64,${item.blobData}`}}
+                      // source={{uri: `data:image/png;base64,${item.image_path}`}}
+                      source={{uri:'ftp://'+item.imagePath}}
                       style={{width: 130, height: 150, margin:5}}/>
                       
                       <View style={{paddingLeft:15}}>
