@@ -34,7 +34,7 @@ const ConnectScreen = () => {
       const getPots = async() =>{
         try{
           deym = das
-          const response = await fetch(`http://${deym}:9191/GetPotholes2`)
+          const response = await fetch(`http://${deym}:9191/GetPotholes `)
           const dat = await response.json();
           setYes(false)
         } catch(error){
@@ -74,9 +74,6 @@ const ConnectScreen = () => {
             <SafeAreaView style={{ flex: 1 }}>
             <WebView 
               source={{ uri: `${das}:5000/` }} 
-            />
-            <WebView 
-              source={{ uri:'https://9gag.com/' }} 
             />
           </SafeAreaView>}
           
