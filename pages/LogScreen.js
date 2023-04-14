@@ -5,66 +5,15 @@ import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 import LinearGradient from 'react-native-linear-gradient';
 import { GlobalContext } from '../datafolder/GlobalState';
 import Lottie from 'lottie-react-native';
-
-import PushNotification from "react-native-push-notification";
-
-const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
-
-
-
-
-const sleep = ms => new Promise(
-  resolve => setTimeout(resolve, ms)
-);
-
-
-
-
-
-sendNotification = () => {
-  //console.log('pressed first')
-  PushNotification.localNotification({
-    title: "You have detect Pothole",
-    message: "Pothole Notification",
-  });
-}
-
-
-
-/*
-<FlatList
-          data={data}
-          keyExtractor={({ id }, index) => id}
-          renderItem={({ item }) => (
-            <Text>{item.title}, {item.releaseYear}</Text>
-          )}
-        />
-
-*/
-
-const Notification = (Location,dateTime) => {
-  PushNotification.localNotification({
-    // /* Android Only Properties /
-    channelId: "channel-id", // (required)
-    channelName: "My channel", // (required)
-
-    title: 'Pothole Detected', // (optional)
-    message: `Pothole Detected in ${Location} at ${dateTime}` ,  // (required)
-  });
-};
-
+import io from 'socket.io-client';
 
 const Log = () => {
-  const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [text,onChangeText] = useState();
   const {das,setDas} = useContext(GlobalContext)
   const {yes,setYes} = useContext(GlobalContext)
   const [modalVisible, setModalVisible] = useState(false);
-  const [newDataCount,setnewDataCount] = useState(null)
   const [emailsuccess,setEmailSuccess] = useState(false);
   const [emaildata,setEmailData] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -85,7 +34,7 @@ const Log = () => {
       "recipient": "dpwhtesting@gmail.com",
       "msgBody": `There is confirm Pothole detected at ${emaildata.location} \n in Longtitude:   ${emaildata.longitude} Latitude ${emaildata.latitude} \n on Time: ${emaildata.dateTime} \n ` ,
       "subject": "Pothole Here!",
-      "attachment":emaildata.imagePath
+      "attachment":`/var/www/html/images/${emaildata.imagePath}`
     }
     console.log("SEND EMAIL!!!")
     let headers = {
@@ -145,25 +94,25 @@ const Log = () => {
       setData(dat);
       setYes(false)
       setYes(false)
-      setnewDataCount(data.length)
-      setRefreshing(true)
     } catch(error){
       console.log("NO VALUE",error)
     }finally {
-      setLoading(false);
-    }
-  }
-  const update_2 = async() =>{
-    try{
-      deym = das
-      const response = await fetch(`http://${deym}:9191/GetPotholes`)
-      const dat = await response.json();
-      setData(prevArray =>[...prevArray,dat])
-      console.log("ERRORUPDATE2")
-    } catch(error){
-      console.error(error);
-      console.log("ERRORUPDATE3")
-    }finally {
+      const socket = io(`http://${deym}:5000`);
+          socket.on('connect', () => {
+            console.log('Connected to socket server');
+            this.setState({ socket });
+          });
+          socket.on('disconnect', () => {
+            console.log('Disconnected from socket server');
+            this.setState({ socket: null });
+          });
+          socket.on('Update', (messages) => {
+            // console.log('Received message: ' + messages);
+            // setMessages(messages);
+            // this.setState({ messages: [...setMessages, messages] });
+            setData(messages);
+            console.log("UPDATE",messages)
+          });
       setLoading(false);
     }
   }
@@ -173,16 +122,6 @@ const Log = () => {
     }
     getPots()
   },[das])
-  useEffect(()=>{
-    if(refreshing == true){
-      const interval = setInterval(()=>{
-        // getAct()
-        getPots()
-        console.log("TryHere")
-      },6000)
-      return () => clearInterval(interval)
-    }
-  },[refreshing]) 
 
 
   
@@ -231,9 +170,8 @@ const Log = () => {
           <View>
                     <View style={styles.itemList}>
                       <Image 
-                      // source={{uri: `data:image/png;base64,${item.image_path}`}}
-                      source={{uri:'ftp://'+item.imagePath}}
-                      style={{width: 130, height: 150, margin:5}}/>
+                      source = {{uri:`http://${das}/images/${item.imagePath}`}}
+                      style={{ width: 130, height: 150 , margin:5}}/>
                       
                       <View style={{paddingLeft:15}}>
                         <Text style={styles.txtName}>Location: {item.location}</Text>

@@ -3,19 +3,23 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GlobalContext } from '../datafolder/GlobalState';
 import WebView from 'react-native-webview';
 import PushNotification from "react-native-push-notification";
-sendNotification = () => {
-  //console.log('pressed first')
-  PushNotification.localNotification({
-    title: "You have detect Pothole",
-    message: "Pothole Notification",
-  });
-}
+import io from 'socket.io-client';
+PushNotification.createChannel(
+  {
+    channelId: "channel-id", // ID of the channel
+    channelName: "My channel", // Name of the channel
+    channelDescription: "My channel description", // Description of the channel
+    playSound: true,
+    vibrate: true, // Vibrate on notification
+    importance: 4 // Notification importance (default)
+  },
+  () => {} // Callback function
+);
+
 const Notification = (Location,dateTime) => {
   PushNotification.localNotification({
     // /* Android Only Properties /
     channelId: "channel-id", // (required)
-    channelName: "My channel", // (required)
-
     title: 'Pothole Detected', // (optional)
     message: `Pothole Detected in ${Location} at ${dateTime}` ,  // (required)
   });
@@ -31,15 +35,32 @@ const ConnectScreen = () => {
       const [text,onChangeText] = useState()
       const [isLoading, setLoading] = useState(true);
       const [data, setData] = useState([]);
+      const [message,setMessages] = useState([]);
       const getPots = async() =>{
         try{
           deym = das
-          const response = await fetch(`http://${deym}:9191/GetPotholes `)
+          const response = await fetch(`http://${deym}:9191/ `)
           const dat = await response.json();
           setYes(false)
         } catch(error){
           console.error(error);
         }finally {
+          const socket = io(`http://${deym}:5000`);
+          socket.on('connect', () => {
+            console.log('Connected to socket server');
+            this.setState({ socket });
+          });
+          socket.on('disconnect', () => {
+            console.log('Disconnected from socket server');
+            this.setState({ socket: null });
+          });
+          socket.on('Notify', (messages) => {
+            // console.log('Received message: ' + messages);
+            // setMessages(messages);
+            // this.setState({ messages: [...setMessages, messages] });
+            Notification(messages[0],messages[1],messages[2],messages[3])
+            console.log("UPDATE")
+          });
           setLoading(false);
         }
       }
@@ -75,6 +96,13 @@ const ConnectScreen = () => {
             <WebView 
               source={{ uri: `${das}:5000/` }} 
             />
+            <WebView
+              source={{ uri: `${das}:5000/location`}}
+            />
+            {/* <Image
+            source = {{uri:"http://192.168.100.59/images/0.png"}}
+            style={{ width: 200, height: 200 }}
+            /> */}
           </SafeAreaView>}
           
             
@@ -86,3 +114,4 @@ const ConnectScreen = () => {
 export default ConnectScreen
 
 const styles = StyleSheet.create({})
+
