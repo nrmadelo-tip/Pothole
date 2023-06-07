@@ -1,15 +1,15 @@
-import { FlatList,Image, StyleSheet, Text, View,Alert, Modal, Pressable , ScrollView, TextInput, Button,TouchableOpacity,RefreshControl } from 'react-native'
+import { FlatList,Image, StyleSheet, Text, View,Alert, Modal, Pressable ,ActivityIndicator, ScrollView, TextInput, Button,TouchableOpacity,RefreshControl } from 'react-native'
 import React, { useContext,useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 import LinearGradient from 'react-native-linear-gradient';
 import { GlobalContext } from '../datafolder/GlobalState';
 import Lottie from 'lottie-react-native';
-import io from 'socket.io-client';
 
 const Log = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
   const [text,onChangeText] = useState();
   const {das,setDas} = useContext(GlobalContext)
   const {yes,setYes} = useContext(GlobalContext)
@@ -17,6 +17,8 @@ const Log = () => {
   const [emailsuccess,setEmailSuccess] = useState(false);
   const [emaildata,setEmailData] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
   let deym
   function updateIP (text){
     setDas(text)
@@ -28,7 +30,18 @@ const Log = () => {
     if(emaildata == null){
       setEmailData(text)
     }
-  }
+  }    
+    useEffect(() => {
+      let timer = null;
+      if(yes === false){
+      timer = setInterval(() => {
+        handleRefresh();
+      }, 30000);
+    }
+      // Clear the interval when the component unmounts
+      return () => clearInterval(timer);
+    }, [yes]);
+  
   const sendEmail = (x) =>{
     var params = {
       "recipient": "dpwhtesting@gmail.com",
@@ -84,48 +97,84 @@ const Log = () => {
         console.log('Oops... ' + error);
     });
   }
-
-  const getPots = async() =>{
+  
+  const getPots = async(loadMore = false) =>{
     try{
       deym = das
-      const response = await fetch(`http://${deym}:9191/GetPotholes`)
-      const dat = await response.json();
-      console.log(dat)
-      setData(dat);
-      setYes(false)
-      setYes(false)
+      console.log(page)
+      const response = await fetch(`http://${deym}:9191/GetPotholes?page=${page}&size=10&sort=dateTime,desc`)
+      const responseData = await response.json()
+      const { content: newData, totalPages: newTotalPages } = responseData;
+      const updatedData = loadMore ? [...data, ...newData] : newData;
+      setData(newData);
+      // console.log("NewData",newData,"responseData",responseData,"updateddata",updatedData)
+      setLoading(false);
+      setRefreshing(false)
+      setTotalPages(newTotalPages);
+
+      setYes(false)  
     } catch(error){
       console.log("NO VALUE",error)
-    }finally {
-      const socket = io(`http://${deym}:5000`);
-          socket.on('connect', () => {
-            console.log('Connected to socket server');
-            this.setState({ socket });
-          });
-          socket.on('disconnect', () => {
-            console.log('Disconnected from socket server');
-            this.setState({ socket: null });
-          });
-          socket.on('Update', (messages) => {
-            // console.log('Received message: ' + messages);
-            // setMessages(messages);
-            // this.setState({ messages: [...setMessages, messages] });
-            setData(messages);
-            console.log("UPDATE",messages)
-          });
-      setLoading(false);
+      setLoading(false)
+      setRefreshing(false)
     }
+    
   }
-  useEffect(()=>{
-    if(das != null){
-      deym = das
-    }
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setPage(0)
     getPots()
+  };
+  useEffect(()=>{
+    if(das != null && yes === true){
+      deym = das
+      getPots();
+      
+    }
   },[das])
+  useEffect(()=>{
+    if(yes === false)
+    {
+      getPots();
+      console.log("pageuseeffect",page)
+    }
+  },[page])
+  const handleLoadMore = () => {
+    if (isLoading || page >= totalPages) return;
+    setPage(page);
+    getPots(true);
+  };
+  const handlePageChange = (pageNumber) => {
+    setRefreshing(true);
+    setPage(pageNumber);
+    
 
+  };
+  const renderFooter = () => {
+    if (!isLoading) return null;
 
-  
+    return (
+      <View>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  };
+  const renderPaginationButtons = () => {
+    const buttons = [];
 
+    for (let i = 0; i <= totalPages-1; i++) {
+      buttons.push(
+        <Button
+          key={i}
+          title={(i+1).toString()}
+          disabled={i===page}
+          onPress={() => handlePageChange(i)}
+        />
+      );
+    }
+
+    return buttons;
+  };
   return(
     <SafeAreaView style={styles.container}>
       { yes && <TextInput
@@ -137,13 +186,36 @@ const Log = () => {
         {yes && 
         <Button
           onPress={()=>updateIP(text)}
-          title="Update IP Address of RPI"
+          title="Update IP Address of Jetson"
           color="#841584"
           
         />}
+        {!yes && 
+          <View style={{ alignItems: 'center', marginTop: 10 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Button
+              title="Previous"
+              disabled={page === 0}
+              onPress={() => handlePageChange(page - 1)}
+            />
+    
+            {renderPaginationButtons()}
+    
+            <Button
+              title="Next"
+              disabled={page+1 >= totalPages}
+              onPress={() => handlePageChange(page + 1)}
+            />
+          </View>
+          </ScrollView>
+        </View>
+
+          }
       <View style={styles.headerBar}>
           <Text style={styles.txtBar}> Log Screen</Text>
       </View>
+      
           <View>
               <Text style={styles.txtHeader}>List of Potholes</Text>
           </View>
@@ -153,14 +225,16 @@ const Log = () => {
                 //   backgroundColor: "white"
                 // }}
                 data={data}
-                keyExtractor={({id}, index) => id}
+                keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={{ paddingBottom: "20%",padding:20,paddingRight:50,paddingLeft:50}}
-                
-                // refreshControl={
-                //   <RefreshControl 
-                //     refreshing={refreshing}
-                //     onRefresh={getPots}/>
-                //   }
+                onEndReached={handleLoadMore}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={renderFooter}
+                refreshControl={
+                  <RefreshControl 
+                    refreshing={refreshing}
+                    onRefresh={handleRefresh}/>
+                  }
 
 
 
@@ -197,7 +271,9 @@ const Log = () => {
                     </View> 
                 
           </View>
+          
           )}/>
+          
           {/* <AnimatedLoader
             visible = {visible}
             overlayColor = "rgba(255,255,255,0.75)"
@@ -270,7 +346,7 @@ const Log = () => {
                                   style={[styles.button, styles.buttonClose]}
                                   onPress={() => setModalVisible(!modalVisible)}
                                 >
-                                  <Text style={styles.textStyle}>Exit Modal</Text>
+                                  <Text style={styles.textStyle}>Cancel</Text>
                                 </Pressable>
                               </View>
                             </View>

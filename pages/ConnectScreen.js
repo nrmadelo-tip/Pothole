@@ -39,12 +39,7 @@ const ConnectScreen = () => {
       const getPots = async() =>{
         try{
           deym = das
-          const response = await fetch(`http://${deym}:9191/ `)
-          const dat = await response.json();
-          setYes(false)
-        } catch(error){
-          console.error(error);
-        }finally {
+          const response = await fetch(`http://${deym}:9191/?page=0&size=1 `)
           const socket = io(`http://${deym}:5000`);
           socket.on('connect', () => {
             console.log('Connected to socket server');
@@ -61,6 +56,13 @@ const ConnectScreen = () => {
             Notification(messages[0],messages[1],messages[2],messages[3])
             console.log("UPDATE")
           });
+          const dat = await response.json();
+          setLoading(false);
+          setYes(false)
+        } catch(error){
+          console.error(error);
+        }finally {
+          
           setLoading(false);
         }
       }
@@ -94,10 +96,8 @@ const ConnectScreen = () => {
             {!yes && 
             <SafeAreaView style={{ flex: 1 }}>
             <WebView 
+              style={{ width: '100%', height: '100%' }}
               source={{ uri: `${das}:5000/` }} 
-            />
-            <WebView
-              source={{ uri: `${das}:5000/location`}}
             />
             {/* <Image
             source = {{uri:"http://192.168.100.59/images/0.png"}}
