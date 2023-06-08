@@ -5,6 +5,7 @@ import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 import LinearGradient from 'react-native-linear-gradient';
 import { GlobalContext } from '../datafolder/GlobalState';
 import Lottie from 'lottie-react-native';
+import ImageModal from 'react-native-image-modal';
 
 const Log = () => {
   const [isLoading, setLoading] = useState(true);
@@ -243,13 +244,20 @@ const Log = () => {
                   
           <View>
                     <View style={styles.itemList}>
-                      <Image 
+                      <ImageModal
+                      resizeMode="contain"
+                      imageBackgroundColor="#000000"
+                      style={{
+                        width: 130,
+                        height: 150,
+                      }} 
                       source = {{uri:`http://${das}/images/${item.imagePath}`}}
-                      style={{ width: 130, height: 150 , margin:5}}/>
+                      // style={{ width: 130, height: 150 , margin:5}}
+                      />
                       
                       <View style={{paddingLeft:15}}>
                         <Text style={styles.txtName}>Location: {item.location}</Text>
-                        <Text style={styles.txtName}>dateTime: {item.dateTime}</Text>
+                        <Text style={styles.txtName}>Date & Time: {item.dateTime.split(".")[0].replace("T"," ")}</Text>
                         <Text style={styles.txtName}>Latitude: {item.latitude}</Text>
                         <Text style={styles.txtName}>Longtitude: {item.longitude}</Text>
 
@@ -427,7 +435,7 @@ const styles = StyleSheet.create({
     padding:20,
     backgroundColor:"#e1e1e1",
     flex: 1,
-    padding: 20
+
   },
   txtBar:{
     fontsize: 50,
@@ -445,7 +453,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingLeft:15,
+    paddingRight:15
   },
   txtName:{
     fontsize: 16,
